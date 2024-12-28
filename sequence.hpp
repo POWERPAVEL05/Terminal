@@ -17,6 +17,10 @@ namespace pav {
 //get screen dimensions
 void screen_get_dim(int* cols, int* rows);
 
+//alternate buffer
+#define screen_enter_altbuff() puts("\e[?1049h")
+#define screen_exit_altbuff() puts("\e[?1049l")
+
 void screen_change(int sig);//todo?
 //===Cursor===
 
