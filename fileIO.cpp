@@ -1,11 +1,38 @@
-#include <iostream>
-#include <fstream>
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
 #include "fileIO.hpp"
 
-//void pav::open_stream(const std::string filename){
-//    std::ifstream fp (filename,std::ios::binary);
+using namespace pav;
+
+//FILE* pav::FileIO::open_file(){
+//    this->t_fp = fopen(this->file_name,"r");
+//    return t_fp;
 //}
-//
-//void pav::close_stream(){
-//
-//}
+
+//get size of file
+std::size_t pav::FileIO::get_file_size(FILE* fp){
+    std::fseek(fp,0,SEEK_END);
+    size_t file_size = (size_t)ftell(fp);
+    std::fseek(fp,0,SEEK_SET);//reset position
+    return(file_size);
+}
+
+//read file into buffer of FILEIO
+int pav::FileIO::file_read(){
+    FILE* fp = fopen(this->file_name,"r");
+    this->buffer = new uint8_t[get_file_size(fp)];
+    size_t actually_read = fread(this->buffer,sizeof(uint8_t),get_file_size(fp),fp);
+    printf("filesize:%lu\t read:%lu",get_file_size(fp),actually_read);
+    fclose(fp);
+    return 0;
+}
+
+//print contents of buffer
+void pav::FileIO::print_buffer(){
+    FILE* fp = fopen(this->file_name,"r");
+    for(int i = 0;i<(int)get_file_size(fp);i++){
+        printf("%c",this->buffer[i]);
+    }
+    printf("\n");
+}

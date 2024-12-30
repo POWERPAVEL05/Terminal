@@ -1,27 +1,38 @@
 #ifndef FILEIO_H
 #define FILEIO_H
 #include <cstddef>
-#include <string>
+#include <cstdint>
+#include <cstdio>
+#include <new>
 namespace pav {
 
 struct FileIO{
+    //FILE* t_fp;
     std::size_t file_size;
-    std::string file_name;
-    
-    FileIO(std::string t_file_name):
+    char* file_name;
+    uint8_t* buffer = new uint8_t[0];
+
+    FileIO(char* t_file_name):
         file_name(t_file_name),
+        //t_fp(open_file()),
         file_size(0)
     {}
 
     ~FileIO(){
-
+        delete[](buffer);
     }
 
-    std::size_t file_get_size();
-    
+    FILE* open_file();
+
+    size_t get_file_size(FILE* fp);    
+
     int file_read();
 
+    void print_buffer();
+
     int file_write();
+
+    void rm_buff();
 };
 
 }
