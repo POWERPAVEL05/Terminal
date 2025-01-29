@@ -2,27 +2,42 @@
 #define SCREEN_H
 #include <cstddef>
 #include <cstdint>
+#include <vector>
 
-namespace pav {
+using namespace std;
+namespace scre {
 
 //concept class
 struct Screen{
-    int x,y;
+    int t_width,t_height,t_pos_x,t_pos_y;
 
-    Screen()
 
+    Screen(int wid,int hei,int pos_x,int pos_y):
+        t_width(wid),
+        t_height(hei),
+        t_pos_x(pos_x),
+        t_pos_y(pos_y)
     {}
+
+    Screen(size_t wid,size_t hei):
+        t_width(wid),
+        t_height(hei),
+        t_pos_x(0),
+        t_pos_y(0)
+    {}
+
+   // Screen():
+   //     t_width(0),
+   //     t_height(0)
+   // {}
 
     ~Screen(){
 
     }
-    void print_buffer(std::uint8_t buffer,std::size_t filesize);
 
-    void print_frame();
+    void display_text(std::vector<uint8_t> buffer); 
 
-    void draw();
     };
-
-}//pav
+}//scre
 
 #endif

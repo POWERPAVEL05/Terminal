@@ -6,6 +6,8 @@
 #ifndef FILE_MAN 
 #define FILE_MAN
 
+#define no_mode ""
+
 namespace file{
 
 struct file_man{
@@ -19,7 +21,9 @@ struct file_man{
     
     //Modes
     const char* get_mode(Mode mode);
+
     bool is_readable(Mode mode);
+
     bool change_modef(Mode mode);
 
     //file access
@@ -29,6 +33,9 @@ struct file_man{
 
     std::size_t readf_bytes(std::size_t size,std::vector<uint8_t> &buffer);
 
+    std::vector<uint8_t*> format_buffer(std::vector<uint8_t> buffer);
+
+    //std::size_t readf_lines(std::size_t size,std::vector<uint8_t*> &buffer);
     //file utility
     std::size_t get_sizef();
 

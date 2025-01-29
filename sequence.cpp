@@ -2,7 +2,7 @@
 #include "sequence.hpp"
 
 //gets the dimensions of the terminal through syscall ioctl and winsize both defined in <sys/ioctl>
-void pav::screen_get_dim(int* cols, int* rows){
+void seq::screen_get_dim(int* cols, int* rows){
     struct winsize size;
     ioctl(0, TIOCGWINSZ, &size);
     *cols = size.ws_col;

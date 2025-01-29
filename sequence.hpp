@@ -7,7 +7,7 @@
 #ifndef SEQ_H
 #define SEQ_H
 
-namespace pav {
+namespace seq {
 
 //===Screen===
 
@@ -53,5 +53,5 @@ void screen_change(int sig);//todo?
 #define CL_B_WHT "\e[47m"
 #define CL_B_BLK "\e[40m"
 
-}
+}//pav
 #endif
