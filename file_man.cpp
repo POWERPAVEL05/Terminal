@@ -1,4 +1,6 @@
 #include "file_man.hpp"
+#include "sequence.hpp"
+#include <algorithm>
 #include <cstddef>
 #include <cstdint>
 #include <cstdio>
@@ -7,6 +9,7 @@
 #include <vector>
 #include <cstring>
 
+using namespace std;
 namespace file {
 
 const char* file_man::get_mode(Mode mode){
@@ -31,7 +34,7 @@ bool file_man::is_readable(Mode mode){
     return mode == read;
 }
 
-FILE* file_man::open_file(std::string namef,Mode mode){
+FILE* file_man::open_file(string namef,Mode mode){
     return(fopen(namef.c_str(),get_mode(mode)));
 }
 
@@ -44,7 +47,7 @@ bool file_man::change_modef(Mode mode){
     return true;
 }
 
-std::size_t file_man::readf_bytes(std::size_t size,std::vector<uint8_t>&buffer){
+size_t file_man::readf_bytes(size_t size,vector<uint8_t>&buffer){
     if(!t_file || !is_readable(t_mode)){
         return 0;
     }else{
@@ -55,19 +58,44 @@ std::size_t file_man::readf_bytes(std::size_t size,std::vector<uint8_t>&buffer){
     }
 }
 
-std::vector<uint8_t*> file_man::format_buffer(std::vector<uint8_t>buffer){
-    std::vector<uint8_t*> lines;
+vector<vector<uint8_t>> format_buffer(vector<uint8_t>buffer){
+    vector< vector<uint8_t> > lines;
+    vector<uint8_t> append;
     for(std::size_t i = 0,line = 0,column = 0; i < buffer.size();i++){
         if(buffer.at(i) == 10){
             line++;
-            column = 0;
+            lines.push_back(append);
+            append.clear();
+            continue;
         }
-        lines[line][column] = buffer.at(i);
-        column++;
+        append.push_back(buffer.at(i));
     }
     return lines;
 }
 
+void draw_call_fbuffer(vector<vector<uint8_t>> buffer, size_t width,size_t n, size_t start = 0){
+    if(width == 0) width = 1;
+    for(size_t i = start; i < buffer.size();i++){
+        if((i-start) == n)break;
+        printf("%s%lu %s",CL_YEL,i,CL_RES);
+        //line is empty
+        if(buffer[i].empty()){ 
+            printf("%s~%s",CL_RED,CL_RES);
+            printf("\n");
+            continue;
+        }
+
+        for(size_t lttr = 0;lttr < buffer[i].size();lttr++){
+            //goto next line if width is reached
+            if((lttr % width) == 0 && lttr != 0){
+               printf("\n  "); 
+            }
+            printf("%c",buffer[i][lttr]);
+        }
+        printf("\n");
+    }
+    //printf("\n");
+}
 std::size_t file_man::get_sizef(){
     if(!t_file){
         return 0;

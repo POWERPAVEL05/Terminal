@@ -6,6 +6,8 @@
 #ifndef FILE_MAN 
 #define FILE_MAN
 
+using namespace std;
+
 #define no_mode ""
 
 namespace file{
@@ -33,7 +35,6 @@ struct file_man{
 
     std::size_t readf_bytes(std::size_t size,std::vector<uint8_t> &buffer);
 
-    std::vector<uint8_t*> format_buffer(std::vector<uint8_t> buffer);
 
     //std::size_t readf_lines(std::size_t size,std::vector<uint8_t*> &buffer);
     //file utility
@@ -44,5 +45,8 @@ struct file_man{
     ~ file_man();
 };
 
+vector<vector<uint8_t>> format_buffer(vector<uint8_t> buffer);
+
+void draw_call_fbuffer(vector<vector<uint8_t>> buffer,size_t width,size_t n,size_t start );
 }//file
 #endif //FILE_MAN
