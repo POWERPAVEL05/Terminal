@@ -1,6 +1,5 @@
 #include "file_man.hpp"
 #include "sequence.hpp"
-#include <algorithm>
 #include <cstddef>
 #include <cstdint>
 #include <cstdio>
@@ -73,29 +72,39 @@ vector<vector<uint8_t>> format_buffer(vector<uint8_t>buffer){
     return lines;
 }
 
-void draw_call_fbuffer(vector<vector<uint8_t>> buffer, size_t width,size_t n, size_t start = 0){
+//draw lines --> formated buffer needed
+void draw_call_fbuffer(vector<vector<uint8_t>> buffer, size_t width,size_t height,size_t n, size_t start = 0){
     if(width == 0) width = 1;
+    if(height == 0) height = 1;
+    size_t temp_height = 0;
+    //print lines
     for(size_t i = start; i < buffer.size();i++){
-        if((i-start) == n)break;
+        if (temp_height == height) {
+            break;
+        }
+        if((i-start) == n)break;//max ammount n of lines have been printed
         printf("%s%lu %s",CL_YEL,i,CL_RES);
         //line is empty
         if(buffer[i].empty()){ 
             printf("%s~%s",CL_RED,CL_RES);
             printf("\n");
+            temp_height++;
             continue;
         }
-
+        //print single line
         for(size_t lttr = 0;lttr < buffer[i].size();lttr++){
             //goto next line if width is reached
             if((lttr % width) == 0 && lttr != 0){
                printf("\n  "); 
+               temp_height++;
             }
             printf("%c",buffer[i][lttr]);
         }
         printf("\n");
+        temp_height++;
     }
-    //printf("\n");
 }
+
 std::size_t file_man::get_sizef(){
     if(!t_file){
         return 0;
@@ -112,7 +121,9 @@ file_man::file_man(std::string namef,Mode mode):
 {};
 
 file_man::~file_man(){
-    fclose(t_file);
+	if(t_file){
+	    fclose(t_file);
+	}
 }
 
 }//file

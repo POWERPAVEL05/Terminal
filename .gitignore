@@ -1,0 +1,8 @@
+source_incl/
+source_lib/
+build/
+leftover/**
+testfiles/
+gitfast.sh
+log.txt
+CMakeLists.txt

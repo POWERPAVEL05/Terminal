@@ -47,6 +47,6 @@ struct file_man{
 
 vector<vector<uint8_t>> format_buffer(vector<uint8_t> buffer);
 
-void draw_call_fbuffer(vector<vector<uint8_t>> buffer,size_t width,size_t n,size_t start );
+void draw_call_fbuffer(vector<vector<uint8_t>> buffer,size_t width,size_t height,size_t n,size_t start );
 }//file
 #endif //FILE_MAN

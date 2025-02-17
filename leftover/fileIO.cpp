@@ -5,12 +5,7 @@
 
 using namespace pav;
 
-//FILE* pav::FileIO::open_file(){
-//    this->t_fp = fopen(this->file_name,"r");
-//    return t_fp;
-//}
-
-//get size of file
+//get size of file in bytes
 std::size_t pav::FileIO::get_file_size(FILE* fp){
     std::fseek(fp,0,SEEK_END);
     size_t file_size = (size_t)ftell(fp);
@@ -21,6 +16,9 @@ std::size_t pav::FileIO::get_file_size(FILE* fp){
 //read file into buffer of FILEIO
 int pav::FileIO::file_read(){
     FILE* fp = fopen(this->file_name,"r");
+    if(!fp){
+        return 1;
+    }
     this->buffer = new uint8_t[get_file_size(fp)];
     size_t actually_read = fread(this->buffer,sizeof(uint8_t),get_file_size(fp),fp);
     printf("filesize:%lu\t read:%lu",get_file_size(fp),actually_read);
@@ -35,4 +33,8 @@ void pav::FileIO::print_buffer(){
         printf("%c",this->buffer[i]);
     }
     printf("\n");
+}
+
+void open_file(){
+    
 }

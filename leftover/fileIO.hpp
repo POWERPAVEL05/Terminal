@@ -3,21 +3,25 @@
 #include <cstddef>
 #include <cstdint>
 #include <cstdio>
-#include <new>
 namespace pav {
 
 struct FileIO{
     //FILE* t_fp;
     std::size_t file_size;
     char* file_name;
-    uint8_t* buffer = new uint8_t[0];
+    uint8_t* buffer;
 
     FileIO(char* t_file_name):
         file_name(t_file_name),
-        //t_fp(open_file()),
+        buffer(nullptr),
         file_size(0)
     {}
 
+    FileIO():
+        file_name(nullptr),
+        buffer(nullptr),
+        file_size(0)
+    {}
     ~FileIO(){
         delete[](buffer);
     }
@@ -33,6 +37,8 @@ struct FileIO{
     int file_write();
 
     void rm_buff();
+
+    bool has_file();
 };
 
 }
