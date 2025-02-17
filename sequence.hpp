@@ -26,7 +26,7 @@ void screen_change(int sig);//todo?
 
 //move cursor to
 //in ansi: rows by cols instead of cols by rows
-#define cursor_move(X,Y) std::printf("\e[%d;%dH",Y,X) 
+#define cursor_move(X,Y) std::printf("\e[%d;%dH",(Y+1),(X+1)) 
 
 //===Color===
 

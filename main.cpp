@@ -15,7 +15,7 @@ using namespace file;
 vector<uint8_t> buffer;
 vector<vector<uint8_t>> fbuffer;
 //Screen s1(20,1,5,5);
-Screen s1(100,50,5,5);
+Screen s1(100,50,6,2);
 dim d1(0,0);
 
 void run(){
@@ -23,16 +23,12 @@ void run(){
     //int rows = 0;
     //screen_get_dim(&cols,&rows);
     screen_get_dim(&d1.t_wid,&d1.t_hei);
-    screen_clear();
     cursor_move(0,0);
-    //cursor_move(1, 1);
-    cursor_move((d1.t_wid-10)/2,d1.t_hei-1);//12 is offset by string
-    std::printf("%s%sX:%d,Y:%d Size:%lu\n%s",CL_BLK,CL_B_WHT,d1.t_wid,d1.t_hei,buffer.size(),CL_RES);
-
-    //draw_call_fbuffer(fbuffer, 1000,1000, 10,0);
+    screen_clear();
     s1.draw_call_fbuffer(fbuffer,d1, 50, 0);
-
-    cursor_move(0, 0);
+    //cursor_move(1, 1);
+    cursor_move((d1.t_wid-11)/2,d1.t_hei-2);//12 is offset by string
+    std::printf("%s%sX:%d,Y:%d Size:%lu\n%s",CL_BLK,CL_B_WHT,d1.t_wid,d1.t_hei,buffer.size(),CL_RES);
 }
 void draw_frame(int signal){
     run();

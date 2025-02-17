@@ -29,10 +29,10 @@ void scrn::Screen::draw_call_fbuffer(vector<vector<uint8_t>> buffer,dim s_dim, s
     //size_t temp_height = 0;
     int s_wid = t_wid;
     int s_hei = t_hei;
-    if(t_wid > s_dim.t_wid){
+    if(t_wid >= s_dim.t_wid){
         s_wid = s_dim.t_wid;
     }
-    if(t_hei > s_dim.t_hei){
+    if(t_hei >= s_dim.t_hei){
         s_hei = s_dim.t_hei;
     }
     size_t line_offset = 0;
@@ -42,6 +42,11 @@ void scrn::Screen::draw_call_fbuffer(vector<vector<uint8_t>> buffer,dim s_dim, s
         if ((line-start)+line_offset >= s_hei) {
             break;
         }
+        //clear line
+        // for(int i = 0;i < (s_wid-t_x);i++){
+        //     printf(" ");
+        // }
+        cursor_move(t_x,(t_y+(int)(line-start)+(int)(line_offset)));//move to appropriate position with line-offset problem is t_x when screen is bigger than window!! 
         if((line-start) == n){
             break;//max ammount n of lines have been printed
         }
@@ -57,7 +62,7 @@ void scrn::Screen::draw_call_fbuffer(vector<vector<uint8_t>> buffer,dim s_dim, s
         //print single line
         for(size_t lttr = 0;lttr < buffer[line].size();lttr++){
             //goto next line if width is reached
-            if((lttr % s_wid) == 0 && lttr != 0){
+            if((lttr) % (s_wid-t_x-1) == 0 && lttr != (t_x-1) && lttr != 0){
                //printf("\n"); 
                line_offset++;
                cursor_move(t_x,(t_y+(int)(line-start)+(int)(line_offset)));
@@ -65,10 +70,11 @@ void scrn::Screen::draw_call_fbuffer(vector<vector<uint8_t>> buffer,dim s_dim, s
             printf("%c",buffer[line][lttr]);
         }
         //line_offset++;
-        printf("\n");//something with t_x
+        //printf("\n");//something with t_x
         //temp_height++;
     }
-    cursor_move(0, 0);
+    cursor_move(0, 1);
+    printf("%u %u\n",s_wid-t_x-1,s_hei);
 }
 
 }//scrn
