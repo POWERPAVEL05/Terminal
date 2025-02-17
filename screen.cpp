@@ -38,7 +38,7 @@ void scrn::Screen::draw_call_fbuffer(vector<vector<uint8_t>> buffer,dim s_dim, s
     size_t line_offset = 0;
     //print lines
     for(size_t line = start; line < buffer.size();line++){
-        cursor_move(t_x,(t_y+(int)(line-start)+(int)(line_offset)));//move to appropriate position with line-offset
+        cursor_move(t_x,(t_y+(int)(line-start)+(int)(line_offset)));//move to appropriate position with line-offset problem is t_x when screen is bigger than window!! 
         if ((line-start)+line_offset >= s_hei) {
             break;
         }
