@@ -9,9 +9,8 @@ using namespace std;
 using namespace seq;
 using namespace scrn;
 using namespace file;
-//todo, resize window will has to show filecontents still
-//make fileio separate file etc
-
+//TODO: PAINPAINPAINPAINPAINPAINPAINPAIN convert everything so screen is a big array of arrays to print
+//should get rid of flickering
 vector<uint8_t> buffer;
 vector<vector<uint8_t>> fbuffer;
 //Screen s1(20,1,5,5);
@@ -24,8 +23,8 @@ void run(){
     //screen_get_dim(&cols,&rows);
     screen_get_dim(&d1.t_wid,&d1.t_hei);
     cursor_move(0,0);
-    screen_clear();
-    s1.draw_call_fbuffer(fbuffer,d1, 50, 0);
+    //screen_clear();
+    //s1.draw_call_fbuffer(fbuffer,d1, 50, 0);
     //cursor_move(1, 1);
     cursor_move((d1.t_wid-11)/2,d1.t_hei-2);//12 is offset by string
     std::printf("%s%sX:%d,Y:%d Size:%lu\n%s",CL_BLK,CL_B_WHT,d1.t_wid,d1.t_hei,buffer.size(),CL_RES);
