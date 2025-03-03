@@ -23,9 +23,11 @@ void run(){
     //screen_get_dim(&cols,&rows);
     screen_get_dim(&d1.t_wid,&d1.t_hei);
     cursor_move(0,0);
+
     //screen_clear();
     //s1.draw_call_fbuffer(fbuffer,d1, 50, 0);
     //cursor_move(1, 1);
+
     cursor_move((d1.t_wid-11)/2,d1.t_hei-2);//12 is offset by string
     std::printf("%s%sX:%d,Y:%d Size:%lu\n%s",CL_BLK,CL_B_WHT,d1.t_wid,d1.t_hei,buffer.size(),CL_RES);
 }

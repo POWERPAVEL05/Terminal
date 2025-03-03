@@ -2,38 +2,38 @@
 #include <cstdio>
 #include <sys/ioctl.h>
 
-//===ANSI-ESCSequences===
+/*===ANSI-ESCSequences===*/
 
 #ifndef SEQ_H
 #define SEQ_H
 
 namespace seq {
 
-//===Screen===
+/*===Screen===*/
 
-//clear screen
+/*clear screen*/
 #define screen_clear() puts("\e[2J")
 
-//get screen dimensions
+/*get screen dimensions*/
 void screen_get_dim(int* cols, int* rows);
 
-//alternate buffer
+/*alternate buffer*/
 #define screen_enter_altbuff() puts("\e[?1049h")
 #define screen_exit_altbuff() puts("\e[?1049l")
 
 void screen_change(int sig);//todo?
-//===Cursor===
+/*===Cursor===*/
 
-//move cursor to
-//in ansi: rows by cols instead of cols by rows
+/*move cursor to*/
+/*in ansi: rows by cols instead of cols by rows*/
 #define cursor_move(X,Y) std::printf("\e[%d;%dH",(Y+1),(X+1)) 
 
-//===Color===
+/*===Color===*/
 
-//Reset Color
+/*Reset Color*/
 #define CL_RES "\e[0;0m"
 
-//Forground
+/*Forground*/
 #define CL_RED "\e[0;31m"
 #define CL_GRE "\e[0;32m"
 #define CL_YEL "\e[0;33m"
@@ -43,7 +43,7 @@ void screen_change(int sig);//todo?
 #define CL_BLK "\e[0;30m"
 #define CL_WHT "\e[0;37m"
 
-//Background
+/*Background*/
 #define CL_B_RED "\e[41m"
 #define CL_B_GRE "\e[42m"
 #define CL_B_YEL "\e[43m"
