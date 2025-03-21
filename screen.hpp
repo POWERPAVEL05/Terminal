@@ -1,47 +1,53 @@
-#ifndef SCREEN_H
-#define SCREEN_H
-#include <cstddef>
-#include <cstdint>
+#ifndef H_SCREEN
+#define H_SCREEN
+
 #include <vector>
+#include <cstdint>
+#include <string>
+#include "sequence.hpp"
 
 using namespace std;
-struct dim{
-    int t_wid,t_hei;
-    explicit dim(int wid, int hei):
-        t_wid(wid),
-        t_hei(hei)
-        {}
-};
-namespace scrn {
+using namespace seq;
 
-struct Screen{
-    int t_wid,t_hei,t_x,t_y;
+namespace scr
+{
 
-    //todo accoutn for wid = hei = 0
-    Screen(int wid,int hei,int pos_x,int pos_y):
-        t_wid(wid),
-        t_hei(hei),
-        t_x(pos_x),
-        t_y(pos_y)
-    {}
-
-    Screen(int wid,int hei):
-        t_wid(wid),
-        t_hei(hei),
-        t_x(0),
-        t_y(0)
-    {}
-
-    ~Screen(){};
-
-    //void display_text(std::vector<uint8_t> buffer); 
-
-    void draw_call_fbuffer(vector<vector<uint8_t>> buffer,dim dim,size_t n,size_t start);
-
+struct 
+Char_Cell
+{
+    union
+    {
+        char letter;
+        uint8_t number;
     };
+    string f_color;
+    string b_color;
+    Char_Cell(char letter,string f_color,string b_color):
+        letter(letter),f_color(f_color),b_color(b_color){};
+    Char_Cell():
+        letter(' '),f_color(F_WHT),b_color(B_BLK){};
+};
 
+struct
+Screen
+{
+    int position_x;
+    int position_y;
+    int height;
+    int width;
+    vector<vector<Char_Cell>>* main_screen;
+    
+    Screen(int pos_x,int pos_y,int hei,int wid,vector<vector<Char_Cell>>* m_screen):
+        position_x(pos_x),position_y(pos_y),height(hei),width(wid),main_screen(m_screen){};
 
+    int map_to_screen(const Char_Cell& character,int pos_x,int pos_y);
+    void set_position();
+    void set_dimensions();
+};
 
-}//scre
-
-#endif
+void screen_get_dim (int* cols, int* rows);
+int draw_screen(const vector<vector<Char_Cell>>& main_screen);
+int get_size(const vector<vector<Char_Cell>> &main_screen);
+int resize_screen(vector<vector<Char_Cell>> &main_screen,int cols,int rows);
+}//scr
+#endif //H_SCREEN

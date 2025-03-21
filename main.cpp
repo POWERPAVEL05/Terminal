@@ -1,62 +1,85 @@
-#include <cstdint>
-#include <vector>
-#include <cstdio>
-#include <csignal>
+#include "display.hpp"
+#include "files.hpp"
 #include "sequence.hpp"
-#include "file_man.hpp"
-#include "screen.hpp"
+#include <cstdio>
+#include <vector>
+#include <cassert>
+#include <csignal>
+
 using namespace std;
-using namespace seq;
-using namespace scrn;
-using namespace file;
-//TODO: PAINPAINPAINPAINPAINPAINPAINPAIN convert everything so screen is a big array of arrays to print
-//should get rid of flickering
-vector<uint8_t> buffer;
-vector<vector<uint8_t>> fbuffer;
-//Screen s1(20,1,5,5);
-Screen s1(100,50,6,2);
-dim d1(0,0);
 
-void run(){
-    //int cols = 0;
-    //int rows = 0;
-    //screen_get_dim(&cols,&rows);
-    screen_get_dim(&d1.t_wid,&d1.t_hei);
-    cursor_move(0,0);
+dply::Window w1(50,50,3,0);
+dply::Window w2(50,25,26,0);
+vector<vector<dply::Char_cell>> fbuffer;
 
-    //screen_clear();
-    //s1.draw_call_fbuffer(fbuffer,d1, 50, 0);
-    //cursor_move(1, 1);
-
-    cursor_move((d1.t_wid-11)/2,d1.t_hei-2);//12 is offset by string
-    std::printf("%s%sX:%d,Y:%d Size:%lu\n%s",CL_BLK,CL_B_WHT,d1.t_wid,d1.t_hei,buffer.size(),CL_RES);
+void
+draw_call(int signal)
+{
+    screen_clear();
+    int cols;
+    int rows;
+    int count;
+    int count1;
+    dply::screen_get_dim(&cols,&rows);
+    cursor_move(0, rows-1);
+    printf("c:%i c1:%i",count,count1);
+    w1.map_textbox(fbuffer,count);
+    //w1.draw_screen();
+    for(int row = 0;row < w1.map.size();row++)
+    {
+        for(int column = 0;column < w1.map[row].size();column++)
+        {
+            print_char_at(w1.map[row][column],column+w1.pos_x,row+w1.pos_y);
+        }
+        count = w1.map.size();
+    }
+    for(int row = 0;row < w1.map.size();row++)
+    {
+        for(int column = 0;column < w1.map[row].size();column++)
+        {
+            print_char_at(w1.map[row][column],column+w1.pos_x,row+w1.pos_y);
+        }
+        count1 = w1.map.size();
+    }
+    //dply::draw_screen(w1.map, 3, 0);
+    
 }
-void draw_frame(int signal){
-    run();
+
+void
+analyze_file
+(vector<vector<dply::Char_cell>> map)
+{
+    for(vector<dply::Char_cell> list : map){
+        if(list.empty()) printf("fizz");
+        for(dply::Char_cell sign : list){
+            printf("%u ",sign.number);
+        }
+        printf("\t%lu\n",list.size());
+    }
+    printf("%lu\n",map.size());
 }
 
 int main(int argc,char** argv){
-    //signal(SIGWINCH, &reformat);
-    if(argc < 2){
-        std::printf("%s [FILENAME]\n",argv[0]);
+    if(argc<2)
+    {
         return 1;
     }
-
-    //setup
-    signal(SIGWINCH, &draw_frame);
-    file_man filer(argv[1],file_man::read);
-    size_t bytes = filer.get_sizef();
-    filer.readf_bytes(bytes,buffer);
-    fbuffer = format_buffer(buffer);
+    
+    std::vector<uint8_t> m_buf;
+    file::file_man f1(argv[1],file::file_man::read);
+    f1.readf_bytes(f1.get_sizef(), m_buf);
+    fbuffer = dply::format_buffer(m_buf);
+    
+    std::signal(SIGWINCH,draw_call);
 
     screen_enter_altbuff();
-    cursor_move(0,0);
+    //draw_call(SIGWINCH);
+    int count = 0;
+   
+    char c = getchar();
 
-    //running test
-    run();
-
-    //end
-    char c = std::getchar();
     screen_exit_altbuff();
+    //w1.draw_screen();
+    //analyze_file(w1.map);
     return 0;
 }
