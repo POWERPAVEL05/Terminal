@@ -4,6 +4,7 @@
 #include "sequence.hpp"
 #include <vector>
 #include <string>
+#include <cstdint>
 using namespace std;
 
 #define CL_F_DEFAULT "white"

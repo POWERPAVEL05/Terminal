@@ -7,9 +7,7 @@
 using namespace std;
 using namespace scr;
 
-void 
-scr::screen_get_dim
-(int* cols, int* rows)
+void scr::screen_get_dim (int* cols, int* rows)
 {
     struct winsize size;
     ioctl(0, TIOCGWINSZ, &size);
@@ -65,4 +63,15 @@ int scr::resize_screen(vector<vector<Char_Cell>> &main_screen,int cols,int rows)
         main_screen[line].resize(cols);
     }
     return main_screen.size();
+}
+
+void scr::Screen::map_rect(Char_Cell background_cell)
+{
+    for(int line = 0;line < height;line++)
+    {
+        for(int cell = 0;cell < width;cell++)
+        {
+            map_to_screen(background_cell,cell,line);
+        }
+    }
 }

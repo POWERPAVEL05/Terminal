@@ -1,10 +1,7 @@
 #include "display.hpp"
 #include "sequence.hpp"
-#include <atomic>
 #include <cstdio>
 #include <cassert>
-#include <array>
-#include <string>
 #include <vector>
 #include "screen.hpp"
 #include <csignal>

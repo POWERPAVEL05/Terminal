@@ -43,6 +43,7 @@ Screen
     int map_to_screen(const Char_Cell& character,int pos_x,int pos_y);
     void set_position();
     void set_dimensions();
+    void map_rect(Char_Cell cell);
 };
 
 void screen_get_dim (int* cols, int* rows);
