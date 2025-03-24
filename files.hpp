@@ -36,9 +36,6 @@ struct file_man{
 
     std::size_t readf_bytes(std::size_t size,std::vector<uint8_t> &buffer);
 
-
-    //std::size_t readf_lines(std::size_t size,std::vector<uint8_t*> &buffer);
-    //file utility
     std::size_t get_sizef();
 
     explicit file_man(std::string namef, Mode mode);
