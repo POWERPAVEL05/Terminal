@@ -1,4 +1,5 @@
-build/
+**/build
+**/build_1
 leftover/**
 testfiles/
 log.txt

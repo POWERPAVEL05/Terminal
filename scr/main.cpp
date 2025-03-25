@@ -1,5 +1,6 @@
-#include "display.hpp"
+#include "screen.hpp"
 #include "sequence.hpp"
+#include "terminal.hpp"
 #include <cstdio>
 #include <cassert>
 #include <vector>

@@ -26,7 +26,7 @@ void trm::terminal_deinit()
 }
 
 /*assure requirements are met then set terminal settings*/
-int trm::terminal_init()
+int trm::terminal_init(bool raw = false)
 {
 
     /*terminal has already been initialised*/
@@ -63,13 +63,18 @@ int trm::terminal_init()
     }
 
     /*set attributes to raw mode*/
-    settings_terminal.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP| INLCR | IGNCR | ICRNL | IXON);
-    settings_terminal.c_oflag &= ~OPOST;
-    settings_terminal.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
-    settings_terminal.c_cflag &= ~(CSIZE | PARENB);
-    settings_terminal.c_cflag |= CS8;
+    if(raw){
+        settings_terminal.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP| INLCR | IGNCR | ICRNL | IXON);
+        settings_terminal.c_oflag &= ~OPOST;
+        settings_terminal.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
+        settings_terminal.c_cflag &= ~(CSIZE | PARENB);
+        settings_terminal.c_cflag |= CS8;
+    }
 
-    tcsetattr(descriptor_terminal,TCSAFLUSH,&settings_terminal);
+    if(tcsetattr(descriptor_terminal,TCSAFLUSH,&settings_terminal) == -1)
+    {
+        return 1;
+    }
 
     return 0;
 }

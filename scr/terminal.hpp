@@ -11,7 +11,7 @@ extern termios settings_terminal;
 
 void terminal_kill(const char* error_message,const int error_code);
 
-int terminal_init();
+int terminal_init(bool raw);
 
 void terminal_deinit();
 }//trm
