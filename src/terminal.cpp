@@ -22,6 +22,10 @@ void trm::terminal_kill(const char* error_message, const int error_code)
 /*set terminal back to state before program execution perform on exit or error*/
 void trm::terminal_deinit()
 {
+    if(descriptor_terminal == -1)
+    {
+        return;
+    }
     tcsetattr(descriptor_terminal,TCSANOW,&restore_terminal);
 }
 
@@ -69,6 +73,7 @@ int trm::terminal_init(bool raw = false)
         settings_terminal.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
         settings_terminal.c_cflag &= ~(CSIZE | PARENB);
         settings_terminal.c_cflag |= CS8;
+        settings_terminal.c_cc[VTIME] = 1; /*100ms timeout*/
     }
 
     if(tcsetattr(descriptor_terminal,TCSAFLUSH,&settings_terminal) == -1)

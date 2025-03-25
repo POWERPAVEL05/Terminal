@@ -10,6 +10,7 @@
 using namespace std;
 using namespace scr;
 using namespace seq;
+using namespace trm;
 
 vector<vector<Char_Cell>>v_main;
 
@@ -25,23 +26,9 @@ void resize_refresh(int signal)
     int cols,rows;
     screen_get_dim(&cols,&rows);
     resize_screen(v_main,cols,rows);
-    for(int i = 0;i<s1.height;i++)
-    {
-        for(int j = 0;j<s1.width;j++)
-        {
-            s1.map_to_screen(blob,j,i);
-        }
-    }
-
-    for(int i = 0;i<s2.height;i++)
-    {
-        for(int j = 0;j<s2.width;j++)
-        {
-            s2.map_to_screen(bob,j,i);
-        }
-    }
+    s1.map_rect(blob);
+    s2.map_rect(bob);
     draw_screen(v_main);
-    //fprintf(stdout,"\e[0;0H");
 }
 
 int main()
@@ -65,21 +52,10 @@ int main()
     }
 
 
-    for(int i = 0;i<s1.height;i++)
-    {
-        for(int j = 0;j<s1.width;j++)
-        {
-            s1.map_to_screen(blob,j,i);
-        }
-    }
+    s1.map_rect(blob);
+    s2.map_rect(bob);
 
-    for(int i = 0;i<s2.height;i++)
-    {
-        for(int j = 0;j<s2.width;j++)
-        {
-            s2.map_to_screen(bob,j,i);
-        }
-    }
+    terminal_init(true);
 
     screen_enter_altbuff();
    
@@ -90,7 +66,7 @@ int main()
     char c = getchar();
 
     screen_exit_altbuff(); 
-    
+    terminal_deinit(); 
     fprintf(stdout,"char:%c\n",v_main[0][0].letter);
     fprintf(stdout,"size:%lu\n",v_main.size());
     return 0;

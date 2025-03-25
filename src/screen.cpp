@@ -65,6 +65,7 @@ int scr::resize_screen(vector<vector<Char_Cell>> &main_screen,int cols,int rows)
     return main_screen.size();
 }
 
+/*draw rectangle with height and width of screen*/
 void scr::Screen::map_rect(Char_Cell background_cell)
 {
     for(int line = 0;line < height;line++)
