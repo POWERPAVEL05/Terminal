@@ -1,23 +1,28 @@
 #include "screen.hpp"
 #include "sequence.hpp"
 #include "terminal.hpp"
+#include "screen.hpp"
+#include "key_codes.hpp"
+#include "keyhandler.hpp"
+
 #include <cstdio>
 #include <cassert>
 #include <vector>
-#include "screen.hpp"
 #include <csignal>
 
 using namespace std;
 using namespace scr;
 using namespace seq;
 using namespace trm;
+using namespace key;
 
-vector<vector<Char_Cell>>v_main;
 
 Char_Cell grob(' ',F_WHT,B_GRE);
 Char_Cell blob('X',F_WHT,B_RED);
 Char_Cell bob('Y',F_WHT,B_YEL);
 
+vector<vector<Char_Cell>>v_main;
+usage_mode globla_mode = normal; 
 Screen s1(10,20,10,15,&v_main);
 Screen s2(5,11,10,100,&v_main);
 
@@ -61,7 +66,6 @@ int main()
    
     cursor_move(0,0);
     draw_screen(v_main);
-    //int capture = draw_screen(v_main);
     signal(SIGWINCH,resize_refresh);
     char c = getchar();
 

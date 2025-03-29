@@ -68,6 +68,8 @@ int trm::terminal_init()
     settings_terminal.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
     settings_terminal.c_cflag &= ~(CSIZE | PARENB);
     settings_terminal.c_cflag |= CS8;
+    settings_terminal.c_cc[VTIME]= 1;
+    settings_terminal.c_cc[VMIN]= 0;
 
     tcsetattr(descriptor_terminal,TCSAFLUSH,&settings_terminal);
 
