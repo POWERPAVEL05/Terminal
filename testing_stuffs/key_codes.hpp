@@ -32,4 +32,5 @@
 #define INSRT_KEY 0x1b5b372b
 #define DEL_KEY 0x1b5b337e
 
+#define INTRPT_KEY 0x3
 #endif

@@ -1,7 +1,10 @@
 #include "keyhandler.hpp"
+#include "terminal.hpp"
+#include "key_codes.hpp"
+
 #include <cstdint>
 #include <unistd.h>
-#include "terminal.hpp"
+
 using namespace key;
 
 
@@ -11,7 +14,7 @@ uint64_t key::get_key()
     /*bad tty*/
     if(trm::descriptor_terminal == -1)
     {
-        return -1;
+        trm::terminal_kill("bad tty at get_key",-1);
     }
 
     uint8_t read_buffer[5];
@@ -35,17 +38,49 @@ uint64_t key::get_key()
 
     return key_code;
 }
-
-int do_key(uint64_t key_code,usage_mode mode)
+/*key interpreatation and functions in normal mode*/
+void key::normal_key(uint64_t key_code)
 {
+    switch(key_code)
+    {
+        case INTRPT_KEY:
+            trm::terminal_kill("forced exit",3);
+            break;
+        case 'i':
+            //change mode
+            break;
+        default:
+            //display key at bottom
+            break;
+    }
+}
+
+/*key interpreatation and functions in insert mode*/
+void key::insert_key(uint64_t key_code)
+{
+    switch (key_code) 
+    {
+        case ESC_KEY:
+            //change mode
+            break;
+        default:
+            //write key to certain buffer
+            break;
+    }
+}
+
+/*function to pick key action depending on the current mode*/
+int key::do_key(usage_mode mode)
+{
+    uint64_t current_key = get_key();
     switch (mode)
     {
         case normal:
-            //do smth
-            break;
+            normal_key(current_key);
+            return 0;
         case insert:
-            //do smth
-            break;
+            insert_key(current_key);
+            return 0;
         default:
             return -1;
     }

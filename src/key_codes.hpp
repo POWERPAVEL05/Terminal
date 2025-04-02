@@ -22,6 +22,7 @@
 #define RGHT_KEY 0x1b5b43
 #define LFT_KEY 0x1b5b44
 
+#define ESC_KEY 0x1b
 #define ENTR_KEY 0xd
 #define TAB_KEY 0x9
 #define PGUP_KEY 0x1b5b357e
@@ -32,4 +33,5 @@
 #define INSRT_KEY 0x1b5b372b
 #define DEL_KEY 0x1b5b337e
 
+#define INTRPT_KEY 0x3
 #endif

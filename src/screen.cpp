@@ -33,6 +33,7 @@ int scr::draw_screen(const vector<vector<Char_Cell>>& main_screen)
 {
     int cell_count;
     cursor_move(0,0);
+    hide_cursor();
     for(int line = 0;line < main_screen.size();line++)
     {
         for(int cell = 0;cell < main_screen[line].size();cell++)
@@ -45,6 +46,7 @@ int scr::draw_screen(const vector<vector<Char_Cell>>& main_screen)
             fprintf(stdout,"%s",CL_RES);
         }
     }
+    show_cursor();
     fflush(stdout);
     return cell_count;
 }

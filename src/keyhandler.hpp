@@ -9,8 +9,12 @@ namespace key
 {
     enum usage_mode {normal = 0, insert = 1};
 
+    void normal_key(uint64_t key_code);
+
+    void insert_key(uint64_t key_code);
+
     uint64_t get_key();
 
-    int do_key(uint64_t key_code,usage_mode mode);
+    int do_key(usage_mode mode);
 }
 #endif

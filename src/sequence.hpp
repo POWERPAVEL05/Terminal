@@ -53,5 +53,11 @@ void screen_change(int sig);//todo?
 #define B_WHT "\e[47m"
 #define B_BLK "\e[40m"
 
+/*private Sequence*/
+
+#define hide_cursor() puts("\e[?25l");
+
+#define show_cursor() puts("\e[?25h");
+
 }//seq
 #endif

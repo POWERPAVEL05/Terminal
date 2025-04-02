@@ -25,7 +25,7 @@ Char_Cell
     Char_Cell(char letter,string f_color,string b_color):
         letter(letter),f_color(f_color),b_color(b_color){};
     Char_Cell():
-        letter(' '),f_color(F_WHT),b_color(B_BLK){};
+        letter(0x20),f_color(F_WHT),b_color(B_BLK){};
 };
 
 struct

@@ -1,7 +1,9 @@
 #include "terminal.hpp"
+#include "sequence.hpp"
 #include <cstdio>
 #include <termios.h>
 #include <cstdlib>
+#include <cstring>
 #include <unistd.h>
 #include <errno.h>
 
@@ -15,6 +17,7 @@ termios trm::settings_terminal;
 /*call when critical error occurs, app has to close*/
 void trm::terminal_kill(const char* error_message, const int error_code)
 {
+    //screen_exit_altbuff();
     fprintf(stderr,"[%i]%s\n",error_code,error_message);
     exit(error_code);
 }
@@ -82,4 +85,13 @@ int trm::terminal_init(bool raw = false)
     }
 
     return 0;
+}
+
+char* get_cursor()
+{
+    char buffer[16];
+    const char* sequence = "\e[6n";
+    write(trm::descriptor_terminal,&sequence,strlen(sequence));
+    read(trm::descriptor_terminal,&buffer,16);
+    
 }
