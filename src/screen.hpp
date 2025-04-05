@@ -11,6 +11,11 @@ using namespace seq;
 
 namespace scr
 {
+struct Status
+{
+    char last_key;
+    //do status stuff
+};
 
 struct 
 Char_Cell
@@ -36,7 +41,6 @@ Screen
     int height;
     int width;
     vector<vector<Char_Cell>>* main_screen;
-    
     Screen(int pos_x,int pos_y,int hei,int wid,vector<vector<Char_Cell>>* m_screen):
         position_x(pos_x),position_y(pos_y),height(hei),width(wid),main_screen(m_screen){};
 
@@ -50,5 +54,31 @@ void screen_get_dim (int* cols, int* rows);
 int draw_screen(const vector<vector<Char_Cell>> &main_screen);
 int get_size(const vector<vector<Char_Cell>> &main_screen);
 int resize_screen(vector<vector<Char_Cell>> &main_screen,int cols,int rows);
+
+struct state_data
+{
+    uint8_t mode;
+    uint64_t line;
+    uint64_t row;
+};
+
+struct window_t
+{
+    int pos_x;
+    int pos_y;
+    int wid;
+    int hei;
+    void(*update_behaviour)(const window_t*);
+    vector<vector<Char_Cell>> *win_main;
+    size_t window_id;
+    void* buffer;
+};
+
+void map_screen(vector<vector<Char_Cell>> *win_main,Char_Cell cell,int pos_x,int pos_y);
+void behave_box(const window_t *win);
+void behave_text(const window_t *win);
+void behave_status(const window_t *win);
+
+void update_win(const window_t *win);
 }//scr
 #endif //H_SCREEN

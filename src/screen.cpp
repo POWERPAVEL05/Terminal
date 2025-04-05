@@ -1,5 +1,6 @@
 #include "screen.hpp"
 #include "sequence.hpp"
+#include <cstring>
 #include <vector>
 #include <cstdio>
 #include <sys/ioctl.h>
@@ -77,4 +78,76 @@ void scr::Screen::map_rect(Char_Cell background_cell)
             map_to_screen(background_cell,cell,line);
         }
     }
+}
+
+/*window_t section*/
+
+void scr::map_screen(vector<vector<Char_Cell>> *win_main,Char_Cell cell,int pos_x,int pos_y)
+{
+    if(win_main->size() <= pos_y || win_main->at(0).size() <= pos_x)
+    {
+        return;
+    }
+    (*win_main)[pos_y][pos_x] = cell;
+}
+
+void scr::behave_box(const window_t *win)
+{
+    Char_Cell cell(' ',F_WHT,B_BLU);
+    for(int hei = 0;hei < win->hei;hei++)
+    {
+        for(int wid = 0;wid < win->wid;wid++)
+        {
+            map_screen(win->win_main,cell,((win->pos_x)+wid),((win->pos_y)+hei));
+        }
+    }
+}
+
+void scr::behave_text(const window_t *win)
+{
+    if(!win->buffer)
+    {
+        fprintf(stderr,"Text-Window does not have access to valid buffer\n");
+        return;
+    }
+    vector<const char*> *t_buffer = (vector<const char*>*) win->buffer;
+}
+
+void scr::behave_status(const window_t *win)
+{
+    if(!win->buffer)
+    {
+        fprintf(stderr,"Status-Window does not have access to valid buffer\n");
+        return;
+    }
+    state_data *t_buffer = (state_data*)win->buffer;
+    const char * mode;
+    if(t_buffer->mode == 0)
+    {
+        mode = "NORMAL";
+    }
+    else 
+    {
+        mode = "INSERT";
+    }
+    char data[256];
+    sprintf(data,"MODE:%s [%lu,%lu]",mode,t_buffer->line,t_buffer->row);
+    int cols,rows;
+    screen_get_dim(&cols,&rows);
+    for(int i = 0; i < strlen(data);i++)
+    {
+        Char_Cell cell(data[i],F_BLK,B_WHT);
+        map_screen(win->win_main,cell,i,win->pos_y);
+    }
+    for(int i = strlen(data);i<cols;i++)
+    {
+        Char_Cell cell(' ',F_BLK,B_WHT);
+        map_screen(win->win_main,cell,i,win->pos_y);
+    }
+}
+
+void scr::update_win(const window_t *win)
+{
+    void(*update)(const window_t*) = win->update_behaviour;
+    update(win);
 }

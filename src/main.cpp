@@ -1,10 +1,9 @@
 #include "screen.hpp"
 #include "sequence.hpp"
 #include "terminal.hpp"
-#include "key_codes.hpp"
-#include "keyhandler.hpp"
 
 #include <cstdio>
+#include <cstring>
 #include <cassert>
 #include <cstdlib>
 #include <vector>
@@ -14,19 +13,17 @@ using namespace std;
 using namespace scr;
 using namespace seq;
 using namespace trm;
-using namespace key;
-
 
 Char_Cell grob(' ',F_WHT,B_GRE);
 Char_Cell blob('X',F_WHT,B_RED);
 Char_Cell bob('Y',F_WHT,B_YEL);
 
 vector<vector<Char_Cell>>g_main;
-usage_mode g_mode = normal; 
+//usage_mode g_mode = normal; 
 
 Screen s1(10,20,10,15,&g_main);
 Screen s2(5,11,10,100,&g_main);
-bool running;
+// bool running;
 void resize_refresh(int signal)
 {
     int cols,rows;
@@ -43,8 +40,9 @@ void draw_screen()
     draw_screen(g_main);
 }
 
-int main()
+int main(int argc,char** argv)
 {
+
     /*init segment todo: will be replaced by dedicated method*/
     int cols,rows;
     screen_get_dim(&cols,&rows);
@@ -55,6 +53,18 @@ int main()
     {
         g_main.push_back(tempv);
     }
+    state_data data0 = {0,45,30};
+    window_t win0 = {2,2,5,5,&behave_box,&g_main,0,nullptr};
+    window_t win1 = {2,7,90,5,&behave_box,&g_main,0,nullptr};
+    window_t status_bar = {0,rows-1,0,0,&behave_status,&g_main,0,&data0};
+    update_win(&win0);
+    update_win(&win1);
+    update_win(&status_bar);
+    screen_enter_altbuff();
+    draw_screen(g_main);
+    char c = getchar();
+    screen_exit_altbuff();
+    return 0;
 
     s1.map_rect(blob);
     s2.map_rect(bob);
@@ -68,13 +78,13 @@ int main()
     signal(SIGWINCH,resize_refresh);
 
     /*programm loop*/
-    while(running)
+    while(1)
     {
         if(1)//todo check if refresh is needed
         {
             draw_screen(g_main);
         }
-        key::do_key(g_mode);
+        //key::do_key(g_mode);
     }
 
     //char c = getchar();
