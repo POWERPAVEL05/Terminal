@@ -52,8 +52,7 @@ Screen
 
 void screen_get_dim (int* cols, int* rows);
 int draw_screen(const vector<vector<Char_Cell>> &main_screen);
-int get_size(const vector<vector<Char_Cell>> &main_screen);
-int resize_screen(vector<vector<Char_Cell>> &main_screen,int cols,int rows);
+int resize_screen(vector<vector<Char_Cell>> &main_screen);
 
 struct state_data
 {

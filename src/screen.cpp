@@ -52,13 +52,12 @@ int scr::draw_screen(const vector<vector<Char_Cell>>& main_screen)
     return cell_count;
 }
 
-int scr::get_size(const vector<vector<Char_Cell>> &main_screen)
-{
-    return main_screen.size();
-}
 
-int scr::resize_screen(vector<vector<Char_Cell>> &main_screen,int cols,int rows)
+int scr::resize_screen(vector<vector<Char_Cell>> &main_screen)
 {  
+    int cols,rows;
+    screen_get_dim(&cols,&rows);
+    main_screen.clear();
     main_screen.resize(rows);
 
     for(int line = 0;line<main_screen.size();line++)
@@ -113,6 +112,7 @@ void scr::behave_text(const window_t *win)
     vector<const char*> *t_buffer = (vector<const char*>*) win->buffer;
 }
 
+/*map status bar at win->pos_y buffer is interpreted as state_data other members do not matter*/
 void scr::behave_status(const window_t *win)
 {
     if(!win->buffer)
@@ -137,12 +137,12 @@ void scr::behave_status(const window_t *win)
     for(int i = 0; i < strlen(data);i++)
     {
         Char_Cell cell(data[i],F_BLK,B_WHT);
-        map_screen(win->win_main,cell,i,win->pos_y);
+        map_screen(win->win_main,cell,i,rows-1);
     }
     for(int i = strlen(data);i<cols;i++)
     {
         Char_Cell cell(' ',F_BLK,B_WHT);
-        map_screen(win->win_main,cell,i,win->pos_y);
+        map_screen(win->win_main,cell,i,rows-1);
     }
 }
 
