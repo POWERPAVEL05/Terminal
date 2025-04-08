@@ -77,6 +77,7 @@ int trm::terminal_init(bool raw = false)
         settings_terminal.c_cflag &= ~(CSIZE | PARENB);
         settings_terminal.c_cflag |= CS8;
         settings_terminal.c_cc[VTIME] = 1; /*100ms timeout*/
+        settings_terminal.c_cc[VMIN] = 0;
     }
 
     if(tcsetattr(descriptor_terminal,TCSAFLUSH,&settings_terminal) == -1)

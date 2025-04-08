@@ -31,13 +31,100 @@ void resize_refresh(int signal)
         update_win(&window);
     }
         
-    draw_screen(g_main);
+    //draw_screen(g_main);
 }
 
+int bstrcmp(const char* str1,const char* str2)
+{
+    if(strlen(str1) != strlen(str2))
+    {
+        return 0;
+    }
+    for(int idx = 0; idx < strlen(str1);idx++)
+    {
+        if(str1[idx] != str2[idx])
+        {
+            //printf("s1:%c s2:%c\n",str1[idx],str2[idx]);
+            return 0;
+        }
+    }
+    return 1;
+}
 
 int main(int argc,char** argv)
 {
 
+    enum{
+        await_any = 0,await_option = 1,await_file = 2
+    }state_flag;
+
+    state_flag= await_any;
+    char lastflag = ' ';
+    for(int nflag = 1; nflag < argc; nflag++)
+    {
+        char* inputf = argv[nflag];
+        option_change:
+        switch (state_flag) 
+        {
+            case(await_any):
+            {
+                if(inputf[0] != '-')
+                {
+                    if(lastflag == ' ')
+                    {
+                        state_flag = await_file;
+                    }
+                    else 
+                    {
+                        state_flag = await_option;
+                    }
+                    goto option_change;
+                }
+                if(bstrcmp(inputf,"-h")||bstrcmp(inputf,"--help"))
+                {
+                    printf("Usage: %s [options] -filename\n",argv[0]);
+                    return 0;
+                }
+                else if (bstrcmp(inputf,"-g")) 
+                {
+                    printf("[%s]flag set\n",inputf);
+                }
+                else if (bstrcmp(inputf,"-f")) 
+                {
+                    printf("[%s]flag set, awating option\n",inputf);
+                    lastflag = 'f';
+                    state_flag = await_option;
+                }
+                else 
+                {
+                    printf("bad flag %s\n",inputf);
+                }
+                break;
+            }
+            case(await_option):
+            {
+                if(lastflag == 'f' && ((bstrcmp(inputf,"TRUE"))||(bstrcmp(inputf,"FALSE"))))
+                {
+                    printf("good option after -%c !\n",lastflag);
+                    lastflag = ' ';
+                    state_flag = await_any;
+                }
+                else 
+                {
+                    printf("bad option after -%c !\n",lastflag);
+                    return 1;
+                }
+                break;
+            }
+            case(await_file):
+            {
+                printf("[FILE] %s\n",inputf);
+                state_flag = await_any;
+            }
+        }
+    }
+
+    return 0;
     /*init segment todo: will be replaced by dedicated method*/
     terminal_init(true);
     int cols,rows;
@@ -73,13 +160,12 @@ int main(int argc,char** argv)
     screen_get_dim(&p_cols,&p_rows);
     signal(SIGWINCH, resize_refresh);
     draw_screen(g_main);
+    int refresh_count = 0;
+
     while(1)
     {
-        if(key::get_key() == INTRPT_KEY)
-        {
-            terminal_kill("SIGINT\n",2);
-        }
-        else continue;
+        key::do_key(key::normal);
+        refresh_count++;
     }
 
     //char c = getchar();
