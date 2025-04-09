@@ -2,7 +2,7 @@
 #include "keyhandler.hpp"
 #include "screen.hpp"
 #include "sequence.hpp"
-#include "terminal.hpp"
+#include "terminal_utility.hpp"
 
 #include <cstdio>
 #include <cstring>

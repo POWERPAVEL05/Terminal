@@ -1,5 +1,5 @@
 #include "keyhandler.hpp"
-#include "terminal.hpp"
+#include "terminal_utility.hpp"
 #include "key_codes.hpp"
 
 #include <cstdint>

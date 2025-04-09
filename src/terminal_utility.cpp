@@ -1,5 +1,6 @@
-#include "terminal.hpp"
+#include "terminal_utility.hpp"
 #include "sequence.hpp"
+#include <cstddef>
 #include <cstdio>
 #include <termios.h>
 #include <cstdlib>
@@ -88,6 +89,65 @@ int trm::terminal_init(bool raw = false)
     return 0;
 }
 
+int bstrcmp(const char* str1,const char* str2)
+{
+    if(strlen(str1) != strlen(str2))
+    {
+        return 0;
+    }
+    for(int idx = 0; idx < strlen(str1);idx++)
+    {
+        if(str1[idx] != str2[idx])
+        {
+            //printf("s1:%c s2:%c\n",str1[idx],str2[idx]);
+            return 0;
+        }
+    }
+    return 1;
+}
+
+int cmpflg(const char* arg,const char* flags[], size_t count)
+{
+    for(int idx = 0; idx < count ;idx++)
+    {
+        if(bstrcmp(arg,flags[idx]))
+        {
+            return 1;
+        }
+    }
+    return 0;
+}
+void trm::init_flags(trm::flag_options* flag_op,char** args, size_t count)
+{
+    enum
+    {
+        await_any = 0,await_arg = 1,await_file = 2
+    }t_state;
+
+    t_state = await_any;
+    for(int idx = 0; idx < count;idx++)
+    {
+        char* arg = args[idx];
+        switch (t_state)
+        {
+            case(await_any):
+            {
+                if(cmpflg(arg,{"-h","--help"},2))
+                {
+
+                }
+            }
+            case(await_arg):
+            {
+
+            }
+            case(await_file):
+            {
+
+            }
+        }
+    }
+}
 // char* get_cursor()
 // {
 //     char buffer[16];
