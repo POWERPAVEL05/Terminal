@@ -89,7 +89,7 @@ int trm::terminal_init(bool raw = false)
     return 0;
 }
 
-int bstrcmp(const char* str1,const char* str2)
+int trm::bstrcmp(const char* str1,const char* str2)
 {
     if(strlen(str1) != strlen(str2))
     {
@@ -106,7 +106,7 @@ int bstrcmp(const char* str1,const char* str2)
     return 1;
 }
 
-int cmpflg(const char* arg,const char* flags[], size_t count)
+int trm::cmpflg(const char* arg,const char** flags, size_t count)
 {
     for(int idx = 0; idx < count ;idx++)
     {
@@ -122,28 +122,59 @@ void trm::init_flags(trm::flag_options* flag_op,char** args, size_t count)
     enum
     {
         await_any = 0,await_arg = 1,await_file = 2
-    }t_state;
+    }t_state = await_any;
 
-    t_state = await_any;
-    for(int idx = 0; idx < count;idx++)
+    for(int idx = 1; idx < count;idx++)
     {
         char* arg = args[idx];
+
+        if(arg[0] != '-')
+        {
+            t_state = await_file;
+        }
+
         switch (t_state)
         {
             case(await_any):
             {
-                if(cmpflg(arg,{"-h","--help"},2))
+                if(cmpflg(arg,(const char*[]){"-h","--help"},2))
                 {
-
+                    printf("Usage\n");
+                    return;
                 }
+                if(cmpflg(arg,(const char*[]){"-v","--version"},2))
+                {
+                    printf("Version\n");
+                    return;
+                }
+                else if(cmpflg(arg,(const char*[]){"-1"},1)&& (flag_op->s_flag & 1) == 0)
+                {
+                    flag_op->s_flag += 1;
+                }
+                else if(cmpflg(arg,(const char*[]){"-2"},1)&& (flag_op->s_flag & 2) == 0)
+                {
+                    flag_op->s_flag += 2;
+                }
+                else if(cmpflg(arg,(const char*[]){"-3"},1)&& (flag_op->s_flag & 4) == 0)
+                {
+                    flag_op->s_flag += 4;
+                }
+                else if(cmpflg(arg,(const char*[]){"-4"},1)&& (flag_op->s_flag & 8) == 0)
+                {
+                    flag_op->s_flag += 8;
+                }
+                break;
             }
             case(await_arg):
             {
-
+                printf("ding!\n");
+                break;
             }
             case(await_file):
             {
-
+                flag_op->filename = arg;
+                printf("[FILE] %s\n",flag_op->filename);
+                break;
             }
         }
     }
