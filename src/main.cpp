@@ -48,9 +48,9 @@ int main(int argc,char** argv)
     }
 
     state_data data0 = {scr::normal,0,0};
-    window_t win0 = {2,2,5,5,&behave_box,&g_main,0,nullptr};
-    window_t win1 = {2,7,90,5,&behave_box,&g_main,0,nullptr};
-    window_t g_status_bar = {0,0,0,0,&behave_status,&g_main,0,&data0};
+    window_t win0 = {2,2,5,5,&behave_box,&g_main,nullptr};
+    window_t win1 = {2,7,90,5,&behave_box,&g_main,nullptr};
+    window_t g_status_bar = {0,0,0,0,&behave_status,&g_main,&data0};
     g_window_que = {win0,win1,g_status_bar};
 
     screen_enter_altbuff();

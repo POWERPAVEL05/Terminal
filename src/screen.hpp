@@ -54,7 +54,12 @@ void screen_get_dim (int* cols, int* rows);
 int draw_screen(const vector<vector<Char_Cell>> &main_screen);
 int resize_screen(vector<vector<Char_Cell>> &main_screen);
 
-enum mode{normal = 0, insert = 1};
+enum mode{
+    normal  = 0,
+    insert  = 1,
+    command = 2,
+    any     = 3    
+};
 
 struct state_data
 {
@@ -71,7 +76,6 @@ struct window_t
     int hei;
     void(*update_behaviour)(const window_t*);
     vector<vector<Char_Cell>> *win_main;
-    size_t window_id;
     void* buffer;
 };
 
@@ -81,5 +85,32 @@ void behave_text(const window_t *win);
 void behave_status(const window_t *win);
 
 void update_win(const window_t *win);
+
+struct win_t
+{
+    int pos_x;
+    int pos_y;
+    int wid;
+    int hei;
+    void(*update_behaviour)(const window_t*);
+    vector<vector<Char_Cell>> *win_main;
+    void* buffer;
+};
+
+struct state_t
+{
+    vector<window_t> windows;
+    vector<vector<Char_Cell>> screen;
+    size_t col = 0,row = 0;
+    size_t select_window = 0;
+};
+
+struct windowman_t
+{
+    state_t state;
+
+    void add();
+};
+
 }//scr
 #endif //H_SCREEN
