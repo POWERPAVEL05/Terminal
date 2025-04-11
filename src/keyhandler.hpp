@@ -1,5 +1,6 @@
 #ifndef H_KEYS
 #define H_KEYS
+#include "screen.hpp"
 #include <cstdint>
 using namespace std;
 
@@ -7,14 +8,12 @@ using namespace std;
 
 namespace key 
 {
-    enum usage_mode {normal = 0, insert = 1};
+    void normal_key(uint64_t key_code,scr::state_data* program_state);
 
-    void normal_key(uint64_t key_code);
-
-    void insert_key(uint64_t key_code);
+    void insert_key(uint64_t key_code,scr::state_data* program_state);
 
     uint64_t get_key();
 
-    int do_key(usage_mode mode);
+    uint64_t do_key(scr::state_data* program_state);
 }
 #endif

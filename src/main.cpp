@@ -1,4 +1,3 @@
-#include "key_codes.hpp"
 #include "keyhandler.hpp"
 #include "screen.hpp"
 #include "sequence.hpp"
@@ -19,9 +18,6 @@ using namespace trm;
 vector<vector<Char_Cell>>g_main;
 vector<window_t> g_window_que;
 state_data data0;
-window_t win0;
-window_t win1;
-window_t g_status_bar;
 
 void resize_refresh(int signal)
 {
@@ -31,19 +27,17 @@ void resize_refresh(int signal)
         update_win(&window);
     }
         
-    //draw_screen(g_main);
+    draw_screen(g_main);
 }
 
 int main(int argc,char** argv)
 {
-    trm::flag_options op0;
-    trm::init_flags(&op0,argv,argc);
-    printf("%i\n",op0.s_flag);
-    return 0;
-
-    /*init segment todo: will be replaced by dedicated method*/
-    terminal_init(true);
     int cols,rows;
+    flag_options f_opts;
+    init_flags(&f_opts,argv,argc);
+
+    terminal_init(true);
+
     screen_get_dim(&cols,&rows);
 
     g_main.reserve(rows);
@@ -52,10 +46,11 @@ int main(int argc,char** argv)
     {
         g_main.push_back(tempv);
     }
-    state_data data0 = {1,45,30};
-    win0 = {2,2,5,5,&behave_box,&g_main,0,nullptr};
-    win1 = {2,7,90,5,&behave_box,&g_main,0,nullptr};
-    g_status_bar = {0,0,0,0,&behave_status,&g_main,0,&data0};
+
+    state_data data0 = {scr::normal,0,0};
+    window_t win0 = {2,2,5,5,&behave_box,&g_main,0,nullptr};
+    window_t win1 = {2,7,90,5,&behave_box,&g_main,0,nullptr};
+    window_t g_status_bar = {0,0,0,0,&behave_status,&g_main,0,&data0};
     g_window_que = {win0,win1,g_status_bar};
 
     screen_enter_altbuff();
@@ -71,17 +66,21 @@ int main(int argc,char** argv)
 
     /*programm loop*/
 
-    int p_cols,p_rows;
-    int c_cols,c_rows;
-    screen_get_dim(&p_cols,&p_rows);
     signal(SIGWINCH, resize_refresh);
     draw_screen(g_main);
-    int refresh_count = 0;
 
     while(1)
     {
-        key::do_key(key::normal);
-        refresh_count++;
+        for(window_t window : g_window_que)
+        {
+            update_win(&window);
+        }
+        draw_screen(g_main);
+        while(1)
+        {
+            if(key::do_key(&data0) > 0) break;
+            // printf("%lx\n\r",key::do_key(&data0));
+        }
     }
 
     //char c = getchar();

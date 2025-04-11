@@ -115,14 +115,15 @@ void scr::behave_text(const window_t *win)
 /*map status bar at win->pos_y buffer is interpreted as state_data other members do not matter*/
 void scr::behave_status(const window_t *win)
 {
+    state_data *t_buffer = (state_data*)win->buffer;
+    const char * mode;
+
     if(!win->buffer)
     {
         fprintf(stderr,"Status-Window does not have access to valid buffer\n");
         return;
     }
-    state_data *t_buffer = (state_data*)win->buffer;
-    const char * mode;
-    if(t_buffer->mode == 0)
+    if(t_buffer->t_mode == 0)
     {
         mode = "NORMAL";
     }

@@ -4,6 +4,10 @@
 #include <termios.h>
 #include <cstdint>
 #include <cstdlib>
+#include <vector>
+#include <string>
+
+using namespace std;
 
 namespace trm
 {
@@ -17,11 +21,11 @@ int terminal_init(bool raw);
 
 void terminal_deinit();
 
-int bstrcmp(const char* str1,const char* str2);
-int cmpflg(const char* arg,const char** flags, size_t count);
+int bstrcmp(const string str1,const string str2);
+int cmpflg(const string,const vector<string>& flags);
 struct flag_options
 {
-    const char* filename;
+    const char* filename = nullptr;
     uint8_t s_flag = 0;//startup-flags
 }
 ;

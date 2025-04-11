@@ -1,8 +1,10 @@
 #include "keyhandler.hpp"
 #include "terminal_utility.hpp"
 #include "key_codes.hpp"
+#include "screen.hpp"
 
 #include <cstdint>
+#include <sys/types.h>
 #include <unistd.h>
 
 using namespace key;
@@ -39,7 +41,7 @@ uint64_t key::get_key()
     return key_code;
 }
 /*key interpreatation and functions in normal mode*/
-void key::normal_key(uint64_t key_code)
+void key::normal_key(uint64_t key_code,scr::state_data* program_state)
 {
     switch(key_code)
     {
@@ -49,6 +51,8 @@ void key::normal_key(uint64_t key_code)
         case 'i':
             //change mode
             break;
+        case 'l':
+            program_state->row += 1;
         default:
             //display key at bottom
             break;
@@ -56,7 +60,7 @@ void key::normal_key(uint64_t key_code)
 }
 
 /*key interpreatation and functions in insert mode*/
-void key::insert_key(uint64_t key_code)
+void key::insert_key(uint64_t key_code,scr::state_data* program_state)
 {
     switch (key_code) 
     {
@@ -70,19 +74,20 @@ void key::insert_key(uint64_t key_code)
 }
 
 /*function to pick key action depending on the current mode*/
-int key::do_key(usage_mode mode)
+uint64_t key::do_key(scr::state_data* program_state)
 {
     uint64_t current_key = get_key();
-    switch (mode)
+    switch (program_state->t_mode)
     {
-        case normal:
-            normal_key(current_key);
-            return 0;
-        case insert:
-            insert_key(current_key);
-            return 0;
+        case scr::normal:
+            normal_key(current_key,program_state);
+            break;
+        case scr::insert:
+            insert_key(current_key,program_state);
+            break;
         default:
-            return -1;
+            break;
     }
-    return 0;
+    //printf("%lu",current_key);
+    return current_key;
 }

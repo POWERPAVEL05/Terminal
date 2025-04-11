@@ -7,6 +7,8 @@
 #include <cstring>
 #include <unistd.h>
 #include <errno.h>
+#include <vector>
+#include <string>
 
 using namespace std;
 
@@ -89,28 +91,22 @@ int trm::terminal_init(bool raw = false)
     return 0;
 }
 
-int trm::bstrcmp(const char* str1,const char* str2)
+int trm::bstrcmp(const string str1,const string str2)
 {
-    if(strlen(str1) != strlen(str2))
+    if(!str1.compare(str2))
+    {
+        return 1;
+    }else 
     {
         return 0;
     }
-    for(int idx = 0; idx < strlen(str1);idx++)
-    {
-        if(str1[idx] != str2[idx])
-        {
-            //printf("s1:%c s2:%c\n",str1[idx],str2[idx]);
-            return 0;
-        }
-    }
-    return 1;
 }
 
-int trm::cmpflg(const char* arg,const char** flags, size_t count)
+int trm::cmpflg(const string arg,const vector<string>& flags)
 {
-    for(int idx = 0; idx < count ;idx++)
+    for(string flag : flags)
     {
-        if(bstrcmp(arg,flags[idx]))
+        if(bstrcmp(arg,flag))
         {
             return 1;
         }
@@ -137,29 +133,29 @@ void trm::init_flags(trm::flag_options* flag_op,char** args, size_t count)
         {
             case(await_any):
             {
-                if(cmpflg(arg,(const char*[]){"-h","--help"},2))
+                if(cmpflg(arg,{"-h","--help"}))
                 {
                     printf("Usage\n");
                     return;
                 }
-                if(cmpflg(arg,(const char*[]){"-v","--version"},2))
+                if(cmpflg(arg,{"-v","--version"}))
                 {
                     printf("Version\n");
                     return;
                 }
-                else if(cmpflg(arg,(const char*[]){"-1"},1)&& (flag_op->s_flag & 1) == 0)
+                else if(cmpflg(arg,{"-1"}) && (flag_op->s_flag & 1) == 0)
                 {
                     flag_op->s_flag += 1;
                 }
-                else if(cmpflg(arg,(const char*[]){"-2"},1)&& (flag_op->s_flag & 2) == 0)
+                else if(cmpflg(arg,{"-2"})&& (flag_op->s_flag & 2) == 0)
                 {
                     flag_op->s_flag += 2;
                 }
-                else if(cmpflg(arg,(const char*[]){"-3"},1)&& (flag_op->s_flag & 4) == 0)
+                else if(cmpflg(arg,{"-3"})&& (flag_op->s_flag & 4) == 0)
                 {
                     flag_op->s_flag += 4;
                 }
-                else if(cmpflg(arg,(const char*[]){"-4"},1)&& (flag_op->s_flag & 8) == 0)
+                else if(cmpflg(arg,{"-4"}) && (flag_op->s_flag & 8) == 0)
                 {
                     flag_op->s_flag += 8;
                 }
@@ -179,11 +175,3 @@ void trm::init_flags(trm::flag_options* flag_op,char** args, size_t count)
         }
     }
 }
-// char* get_cursor()
-// {
-//     char buffer[16];
-//     const char* sequence = "\e[6n";
-//     write(trm::descriptor_terminal,&sequence,strlen(sequence));
-//     read(trm::descriptor_terminal,&buffer,16);
-    
-// }

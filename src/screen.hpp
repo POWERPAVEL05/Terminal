@@ -54,9 +54,11 @@ void screen_get_dim (int* cols, int* rows);
 int draw_screen(const vector<vector<Char_Cell>> &main_screen);
 int resize_screen(vector<vector<Char_Cell>> &main_screen);
 
+enum mode{normal = 0, insert = 1};
+
 struct state_data
 {
-    uint8_t mode;
+    mode t_mode;
     uint64_t line;
     uint64_t row;
 };
