@@ -9,7 +9,7 @@ void windowman_t::add(window_t p_win)
 
 void windowman_t::remove()
 {
-
+    windows.erase();
 }
 
 void windowman_t::update()
@@ -29,5 +29,5 @@ void windowman_t::update_align()
 
 void windowman_t::draw()
 {
-
+    state.screen;
 }

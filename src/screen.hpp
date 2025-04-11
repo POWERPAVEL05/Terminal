@@ -86,31 +86,6 @@ void behave_status(const window_t *win);
 
 void update_win(const window_t *win);
 
-struct win_t
-{
-    int pos_x;
-    int pos_y;
-    int wid;
-    int hei;
-    void(*update_behaviour)(const window_t*);
-    vector<vector<Char_Cell>> *win_main;
-    void* buffer;
-};
-
-struct state_t
-{
-    vector<window_t> windows;
-    vector<vector<Char_Cell>> screen;
-    size_t col = 0,row = 0;
-    size_t select_window = 0;
-};
-
-struct windowman_t
-{
-    state_t state;
-
-    void add();
-};
 
 }//scr
 #endif //H_SCREEN
