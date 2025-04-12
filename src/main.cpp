@@ -2,6 +2,7 @@
 #include "screen.hpp"
 #include "sequence.hpp"
 #include "terminal_utility.hpp"
+#include "screen1.hpp"
 
 #include <cstdio>
 #include <cstring>
@@ -32,6 +33,21 @@ void resize_refresh(int signal)
 
 int main(int argc,char** argv)
 {
+    nscr::windowman_t winman;
+    nscr::window_t win (0,0,0,0,nscr::behave_rect);
+    winman.add(win);
+    winman.add(win);
+    winman.add(win);
+    winman.update_align();
+    char y =getchar(); 
+    screen_enter_altbuff();
+    winman.draw();
+
+    char c =getchar();
+
+    screen_exit_altbuff();
+    printf("%c",winman.state.screen[0][1].letter);
+    return 0;
     int cols,rows;
     flag_options f_opts;
     init_flags(&f_opts,argv,argc);
