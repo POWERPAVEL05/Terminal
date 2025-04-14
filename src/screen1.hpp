@@ -1,6 +1,7 @@
 #ifndef H_SCREEN_1
 #define H_SCREEN_1
 
+#include <cstddef>
 #include <vector>
 #include <cstdint>
 #include <string>
@@ -39,6 +40,7 @@ struct state_t
     vector<vector<cell>> screen;
     size_t col = 0,row = 0;
     size_t select_window = 0;
+    size_t count_window = 3;
 };
 
 struct window_t

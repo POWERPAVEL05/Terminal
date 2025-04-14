@@ -19,12 +19,13 @@ void nscr::map_screen(vector<vector<cell>>& p_screen,cell p_cell,int pos_x,int p
 {
     if(p_screen.size() <= pos_y || p_screen.at(0).size() <= pos_x)
     {
-        printf("x:%i,y:%i",pos_x,pos_y);
+        //printf("x:%i,y:%i",pos_x,pos_y);
         return;
     }
     p_screen[pos_y][pos_x] = p_cell;
 }
 
+/*resizes screen */
 int nscr::resize_screen(vector<vector<cell>> &main_screen)
 {  
     int cols,rows;
@@ -39,6 +40,7 @@ int nscr::resize_screen(vector<vector<cell>> &main_screen)
     return main_screen.size();
 }
 
+/*intit*/
 nscr::windowman_t::windowman_t()
 {
 
@@ -51,16 +53,20 @@ nscr::windowman_t::windowman_t()
         state.screen.push_back(tempv);
     }
 }
+
+/*adds window*/
 void nscr::windowman_t::add(window_t p_win)
 {
     windows.insert(windows.begin(),p_win);
 }
 
+/*remove selected window*/
 void nscr::windowman_t::remove()
 {
     windows.erase(windows.begin()+state.select_window);
 }
 
+/*updates windows*/
 void nscr::windowman_t::update()
 {
     for(window_t window : windows)
@@ -68,8 +74,10 @@ void nscr::windowman_t::update()
         void(*update)(const window_t*,state_t*) = window.update_behaviour;
         update(&window,&state);
     }
+    cursor_move(windows[state.select_window].pos_x, windows[state.select_window].pos_x);
 }
 
+/*alings windows in relation to window size and other windows and then updates windows*/
 void nscr::windowman_t::update_align()
 {
     nscr::resize_screen(state.screen);
@@ -105,12 +113,6 @@ void nscr::windowman_t::update_align()
         windows[idx].pos_y = 0;
 	    compound_wid += windows[idx].wid+1;
     }
-
-    for(window_t win : windows)
-    {
-        printf("wid:%i hei:%i pos_x:%i pos_y:%i\n",win.wid,win.hei,win.pos_x,win.pos_y);
-    }
-    printf("size:%lu,len:%lu",state.screen.size(),state.screen[0].size());
     update();
 }
 
@@ -132,6 +134,8 @@ void nscr::windowman_t::draw()
         }
     }
     show_cursor();
+    //cursor_move(0,0);
+    cursor_move(windows[state.select_window].pos_x,(int)state.col);
     fflush(stdout);
 }
 
@@ -143,8 +147,6 @@ void nscr::behave_rect(const window_t* p_win,state_t* p_state)
     {
         for(int l_wid = 0; l_wid < p_win->wid;l_wid++)
         {
-            //printf("nums:%i\n",l_wid+(1));
-            // map_screen(p_state->screen,c0,l_wid+(2),l_hei+(3));
             map_screen(p_state->screen,c0,l_wid+(p_win->pos_x),l_hei+(p_win->pos_y));
         }
     }

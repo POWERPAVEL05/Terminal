@@ -2,7 +2,9 @@
 #include "terminal_utility.hpp"
 #include "key_codes.hpp"
 #include "screen.hpp"
+#include "screen1.hpp"
 
+#include <cstddef>
 #include <cstdint>
 #include <sys/types.h>
 #include <unistd.h>
@@ -41,7 +43,7 @@ uint64_t key::get_key()
     return key_code;
 }
 /*key interpreatation and functions in normal mode*/
-void key::normal_key(uint64_t key_code,scr::state_data* program_state)
+void key::normal_key(uint64_t key_code,nscr::windowman_t* program_state)
 {
     switch(key_code)
     {
@@ -51,8 +53,28 @@ void key::normal_key(uint64_t key_code,scr::state_data* program_state)
         case 'i':
             //change mode
             break;
+        case 'j':
+            program_state->state.col += 1;
+            break;
+        case 'k':
+            program_state->state.col -= 1;
+            break;
+        case 'h':
+            if(program_state->state.select_window == 0)
+            {
+                break;
+            }
+            program_state->state.select_window-=1;
+            program_state->state.col = 0;
+            break;
         case 'l':
-            program_state->row += 1;
+            if(program_state->state.select_window == 2)
+            {
+                break;
+            }
+            program_state->state.select_window+=1;
+            program_state->state.col = 0;
+            break;
         default:
             //display key at bottom
             break;
@@ -60,7 +82,7 @@ void key::normal_key(uint64_t key_code,scr::state_data* program_state)
 }
 
 /*key interpreatation and functions in insert mode*/
-void key::insert_key(uint64_t key_code,scr::state_data* program_state)
+void key::insert_key(uint64_t key_code,nscr::windowman_t* program_state)
 {
     switch (key_code) 
     {
@@ -74,15 +96,15 @@ void key::insert_key(uint64_t key_code,scr::state_data* program_state)
 }
 
 /*function to pick key action depending on the current mode*/
-uint64_t key::do_key(scr::state_data* program_state)
+uint64_t key::do_key(nscr::windowman_t* program_state)
 {
     uint64_t current_key = get_key();
-    switch (program_state->t_mode)
+    switch (program_state->state.win_mode)
     {
-        case scr::normal:
+        case nscr::normal:
             normal_key(current_key,program_state);
             break;
-        case scr::insert:
+        case nscr::insert:
             insert_key(current_key,program_state);
             break;
         default:
